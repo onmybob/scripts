@@ -1,7 +1,6 @@
-# scripts
-常用脚本
+# 常用脚本
 
-### tag.sh。
+## tag.sh
 
 git版本号自动生成加1
 
