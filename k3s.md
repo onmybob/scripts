@@ -1,4 +1,4 @@
-k3s不同网络完整安装
+#k3s不同网络完整安装
 
 
 ## 安装K3S 准备工作
@@ -91,6 +91,17 @@ curl -sfL https://get.k3s.io | \
 * 获取节点信息 kubectl get nodes -o wide
 * 删除节点 kubectl delete node vm-8-5-ubuntu
 * 日志查看 journalctl -xeu k3s.service
+* 查看配置结构 kubectl explain IngressRoute --recursive
+* 获取node信息 kubectl get pods  -o wide
+* 进入容器 kubectl exec -it hello-node-55cd8d7d78-nbgl5 -- /bin/bash
+* 把server或者pod映射到公网 kubectl port-forward --address 0.0.0.0 service/hello-service 8081:8081
+* 创建阿里云镜像登陆凭证
+```bash
+  kubectl create secret docker-registry aliyun \
+    --docker-server=registry.cn-shenzhen.aliyuncs.com \
+    --docker-username=用户名 \
+    --docker-password=密码
+   ```
 
 ## 卸载k3s
 
