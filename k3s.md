@@ -91,6 +91,10 @@ curl -sfL https://get.k3s.io | \
 * 获取节点信息 kubectl get nodes -o wide
 * 删除节点 kubectl delete node vm-8-5-ubuntu
 * 日志查看 journalctl -xeu k3s.service
+* 部署应用 kubectl apply -f hello.yaml
+* 查看所有部署 kubectl get deployments --all-namespaces
+* 删除部署 kubectl delete deployment hello-node
+* 查看日志 kubectl logs -n kube-system traefik-65c94dcbdc-brrfc -f
 * 查看配置结构 kubectl explain IngressRoute --recursive
 * 获取node信息 kubectl get pods  -o wide
 * 进入容器 kubectl exec -it hello-node-55cd8d7d78-nbgl5 -- /bin/bash
