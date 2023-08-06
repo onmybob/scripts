@@ -67,5 +67,7 @@ spec:
       middlewares:
         - name: redirect-https
           namespace: kube-system
+
+kubectl apply -f hello.yaml 
 ```
           
