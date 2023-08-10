@@ -55,7 +55,7 @@ sysctl -p
 
 #### 本地安装
   ```bash
-    INSTALL_K3S_SKIP_DOWNLOAD=true  INSTALL_K3S_EXEC="--node-external-ip="服务器上的公网IP" --flannel-backend=wireguard-native --flannel-external-ip" ./install.sh
+    INSTALL_K3S_SKIP_DOWNLOAD=true  INSTALL_K3S_EXEC="--node-external-ip="服务器上的公网IP" --kube-proxy-arg proxy-mode=ipvs --flannel-backend=wireguard-native --flannel-external-ip" ./install.sh
    ```
 #### 在线安装
    ```bash
@@ -74,7 +74,7 @@ cat /var/lib/rancher/k3s/server/node-token
 #### 本地安装
   ```bash
   
-  INSTALL_K3S_SKIP_DOWNLOAD=true  K3S_URL=https://服务器上的公网IP:6443 K3S_TOKEN=K10493ee94ca172fa0ba4e0cd1acdc1a0f8cb1f5444eadd852dc1775ef0f0908ac4::server:toke INSTALL_K3S_EXEC="--node-external-ip=本地的公网IP" ./install.sh
+  INSTALL_K3S_SKIP_DOWNLOAD=true  K3S_URL=https://服务器上的公网IP:6443 K3S_TOKEN=K10493ee94ca172fa0ba4e0cd1acdc1a0f8cb1f5444eadd852dc1775ef0f0908ac4::server:toke INSTALL_K3S_EXEC="--kube-proxy-arg proxy-mode=ipvs --node-external-ip=本地的公网IP" ./install.sh
   
    ```
 #### 在线安装
