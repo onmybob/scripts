@@ -1,0 +1,33 @@
+# 比如后端网站地址为:http://10.0.0.1,外部访问的地址为 http://www.bobjoy.com/api 这个时候就需要用到stripPrefix中间件
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: del-api
+  namespace: kube-system
+spec:
+  stripPrefix:
+    prefixes:
+      - /api
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: blog-server
+spec:
+  entryPoints:
+    - web
+    - websecure
+  tls:
+     secretName: bobjoy-cert
+  routes:
+    - match: (Host(`www.bobjoy.com`) && PathPrefix(`/api`))
+      priority: 1
+      kind: Rule
+      middlewares:
+        - name: del-api
+          namespace: kube-system
+      services:
+        - name: blog-server-service
+          port: 8081
