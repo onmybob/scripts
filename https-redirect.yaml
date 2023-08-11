@@ -1,0 +1,29 @@
+# traefik全局https跳转
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: global-http-to-https
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/`)
+      priority: 1000
+      kind: Rule
+      services:
+        - kind: TraefikService
+          name: noop@internal
+      middlewares:
+        - name: global-http-to-https
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: global-http-to-https
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+
+    
