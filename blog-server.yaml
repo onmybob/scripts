@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: blog-server
+  name: blog-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-server
+  template:
+    metadata:
+      labels:
+        app: blog-server
+    spec:
+      containers:
+      - image: registry.cn-shenzhen.aliyuncs.com/onmybob/blog-server:1.0.9
+        imagePullPolicy: Always
+        name: blog-server
+      imagePullSecrets:
+      - name: aliyun
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-server-service
+spec:
+  selector:
+    app: blog-server
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 8080
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: blog-server
+spec:
+  entryPoints:
+    - web
+    - websecure
+  tls:
+     secretName: bobjoy-cert
+  routes:
+    - match: (Host(`www.bobjoy.com`) && PathPrefix(`/api`))
+      priority: 1
+      kind: Rule
+      middlewares:
+        - name: del-api
+          namespace: kube-system
+      services:
+        - name: blog-server-service
+          port: 8081
