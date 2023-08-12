@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dashboard
+  namespace: kube-system
+spec:
+  tls:
+     secretName: traefik-cert
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`traefik.bobjoy.com`) || (PathPrefix(`/dashboard`) || PathPrefix(`/api2`))
+      kind: Rule
+      services:
+        - name: api@internal
+          kind: TraefikService
+      middlewares:
+        - name: traefik-auth
+          namespace: kube-system
