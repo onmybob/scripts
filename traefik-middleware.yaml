@@ -1,0 +1,56 @@
+# traefik授权
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-auth
+  namespace: kube-system
+spec:
+  basicAuth:
+    secret: authsecret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authsecret
+  namespace: kube-system
+data:
+  users: |1
+   YWRtaW46JGFwcjEka0NRODcwMkQkWmV0N2Y4Vk0uLk1HWUlMUi5GcDZxMAo=
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: del-api
+  namespace: kube-system
+spec:
+  stripPrefix:
+    prefixes:
+      - /api
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: global-http-to-https
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/`)
+      priority: 1000
+      kind: Rule
+      services:
+        - kind: TraefikService
+          name: noop@internal
+      middlewares:
+        - name: global-http-to-https
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: global-http-to-https
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
